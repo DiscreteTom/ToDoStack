@@ -56,7 +56,7 @@ void MainWindow::save(){
 
 void MainWindow::load(){
     QFile file("event");
-    if (!file.open(QFile::WriteOnly | QFile::Text)){
+    if (!file.open(QFile::ReadOnly | QFile::Text)){
         return;
     }
 
@@ -65,8 +65,15 @@ void MainWindow::load(){
     int n;
     in >> n;
 
+    QStack<QString> stack;
+
+    in.readLine();
+
     for (int i = 0; i < n; ++i){
-        eventPush(in.readLine());
+        stack.push(in.readLine());
+    }
+    for (int i = 0; i < n; ++i){
+        eventPush(stack.pop());
     }
 }
 
