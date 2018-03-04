@@ -2,6 +2,13 @@
 
 A stack about to-do list which makes your work more systematic
 
+## v1.4
+
+change control on system tray
+
+- left click to show main window
+- right click to show menu
+
 ## v1.3
 
 add ico file
@@ -37,6 +44,13 @@ support basical push and pop
 # 待办事件栈
 
 一个可以使您的工作更系统的工具
+
+## 版本1.4
+
+更改托盘图标操作
+
+- 左击托盘图标显示窗口
+- 右击托盘图标显示菜单
 
 ## 版本1.3
 

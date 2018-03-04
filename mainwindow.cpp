@@ -130,8 +130,11 @@ void MainWindow::getPop()
 void MainWindow::trayClicked(QSystemTrayIcon::ActivationReason reason)
 {
     switch (reason){
-    case QSystemTrayIcon::Trigger:
+    case QSystemTrayIcon::Context:
         menu->exec(this->cursor().pos());
+        break;
+    case QSystemTrayIcon::Trigger:
+        show();
         break;
     }
 }
