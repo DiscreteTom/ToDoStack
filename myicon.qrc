@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/img">
+        <file>ToDoStack.ico</file>
+        <file>ToDoStack.png</file>
+    </qresource>
+</RCC>

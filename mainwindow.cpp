@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    //setup ui
     newEventLe = new QLineEdit(this);
     pushBtn = new QPushButton(this);
     popBtn = new QPushButton(this);
@@ -26,6 +27,21 @@ MainWindow::MainWindow(QWidget *parent) :
     layout->addWidget(eventTable, 2, 0, -1, 2);
     ui->centralWidget->setLayout(layout);
 
+    //set menu on tray
+    icon = new QSystemTrayIcon(this);
+    QIcon thisIcon(":/img/ToDoStack.png");
+    icon->setIcon(thisIcon);
+    connect(icon, &QSystemTrayIcon::activated, this, &MainWindow::trayClicked);
+    icon->show();
+    actionShow = new QAction(tr("Show(&S)"), this);
+    actionClose = new QAction(tr("Exit(&E)"), this);
+    menu = new QMenu(this);
+    menu->addAction(actionShow);
+    menu->addAction(actionClose);
+    connect(actionShow, &QAction::triggered, this, &MainWindow::getShow);
+    connect(actionClose, &QAction::triggered, this, &MainWindow::getClose);
+
+    //get data
     load();
 
     connect(pushBtn, &QPushButton::clicked, this, &MainWindow::getPush);
@@ -111,6 +127,25 @@ void MainWindow::getPop()
     save();
 }
 
+void MainWindow::trayClicked(QSystemTrayIcon::ActivationReason reason)
+{
+    switch (reason){
+    case QSystemTrayIcon::Trigger:
+        menu->exec(this->cursor().pos());
+        break;
+    }
+}
+
+void MainWindow::getShow()
+{
+    show();
+}
+
+void MainWindow::getClose()
+{
+    exit(0);
+}
+
 void MainWindow::keyPressEvent(QKeyEvent *e)
 {
     switch (e->key()){
@@ -122,4 +157,10 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
         getPop();
         break;
     }
+}
+
+void MainWindow::closeEvent(QCloseEvent *e)
+{
+    e->ignore();
+    hide();
 }

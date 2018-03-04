@@ -2,6 +2,14 @@
 
 A stack about to-do list which makes your work more systematic
 
+## v1.3
+
+add ico file
+
+new feature
+
+- change default close action to minimizing program to system tray
+
 ## v1.2
 
 upgrade ui
@@ -29,6 +37,14 @@ support basical push and pop
 # 待办事件栈
 
 一个可以使您的工作更系统的工具
+
+## 版本1.3
+
+添加图标文件
+
+新特性
+
+- 点击关闭按钮将最小化到托盘
 
 ## 版本1.2
 
