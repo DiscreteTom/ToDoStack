@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent) :
     popBtn->setText(tr("Pop"));
     eventTable = new QTableWidget(0, 1, this);
     eventTable->setHorizontalHeaderItem(0, NULL);
+    eventTable->horizontalHeader()->setStretchLastSection(1);
+    eventTable->horizontalHeader()->hide();
     QGridLayout * layout = new QGridLayout(this);
     layout->addWidget(newEventLe, 0, 0, 1, 2);
     layout->addWidget(pushBtn, 1, 0, 1, 1);
