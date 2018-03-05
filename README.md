@@ -2,6 +2,13 @@
 
 A stack about to-do list which makes your work more systematic
 
+## v1.5
+
+new feature
+
+- delete random event
+- stick any event to the top
+
 ## v1.4
 
 change control on system tray
@@ -44,6 +51,13 @@ support basical push and pop
 # 待办事件栈
 
 一个可以使您的工作更系统的工具
+
+## 版本1.5
+
+新特性
+
+- 删除任意事件
+- 置顶事件
 
 ## 版本1.4
 

@@ -16,10 +16,12 @@ MainWindow::MainWindow(QWidget *parent) :
     popBtn = new QPushButton(this);
     pushBtn->setText(tr("Push"));
     popBtn->setText(tr("Pop"));
-    eventTable = new QTableWidget(0, 1, this);
-    eventTable->setHorizontalHeaderItem(0, NULL);
-    eventTable->horizontalHeader()->setStretchLastSection(1);
+    eventTable = new QTableWidget(0, 3, this);
+    eventTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    eventTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+    eventTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
     eventTable->horizontalHeader()->hide();
+    eventTable->setColumnWidth(1, 200);
     QGridLayout * layout = new QGridLayout(this);
     layout->addWidget(newEventLe, 0, 0, 1, 2);
     layout->addWidget(pushBtn, 1, 0, 1, 1);
@@ -97,6 +99,15 @@ void MainWindow::eventPush(const QString &name)
 {
     eventTable->setRowCount(eventTable->rowCount() + 1);
     eventTable->setItem(eventTable->rowCount() - 1, 0, new QTableWidgetItem(tr("")));
+    //get funcBtn
+    upBtnList.append(new funcBtn(eventTable, funcBtn::FuncBtnType::UP, eventTable->rowCount() - 1));
+    deleteBtnList.append(new funcBtn(eventTable, funcBtn::FuncBtnType::DELETE, eventTable->rowCount() - 1));
+    eventTable->setCellWidget(eventTable->rowCount() - 1, 1, upBtnList[upBtnList.length() - 1]);
+    eventTable->setCellWidget(eventTable->rowCount() - 1, 2, deleteBtnList[deleteBtnList.length() - 1]);
+    connect(upBtnList[upBtnList.length() - 1], &QPushButton::clicked, upBtnList[upBtnList.length() - 1], &funcBtn::getClick);
+    connect(upBtnList[upBtnList.length() - 1], &funcBtn::sendIndex, this, &MainWindow::upEvent);
+    connect(deleteBtnList[deleteBtnList.length() - 1], &QPushButton::clicked, deleteBtnList[deleteBtnList.length() - 1], &funcBtn::getClick);
+    connect(deleteBtnList[deleteBtnList.length() - 1], &funcBtn::sendIndex, this, &MainWindow::deleteEvent);
 
     //move item
     for (int i = eventTable->rowCount() - 1; i > 0; --i){
@@ -111,6 +122,9 @@ void MainWindow::eventPush(const QString &name)
 void MainWindow::eventPop()
 {
     eventTable->removeRow(0);
+
+    upBtnList.removeLast();
+    deleteBtnList.removeLast();
 }
 
 void MainWindow::getPush()
@@ -147,6 +161,33 @@ void MainWindow::getShow()
 void MainWindow::getClose()
 {
     exit(0);
+}
+
+void MainWindow::upEvent(int index)
+{
+    if (index < eventTable->rowCount()){
+        //move
+        QString t = eventTable->item(index, 0)->text();
+        for (int i = index; i > 0; --i){
+            eventTable->item(i, 0)->setText(eventTable->item(i - 1, 0)->text());
+        }
+        eventTable->item(0, 0)->setText(t);
+        save();
+    }
+}
+
+void MainWindow::deleteEvent(int index)
+{
+    eventTable->removeRow(index);
+
+    upBtnList.removeAt(index);
+    deleteBtnList.removeAt(index);
+    for (int i = 0; i < upBtnList.length(); ++i){
+        upBtnList[i]->m_index = i;
+        deleteBtnList[i]->m_index = i;
+    }
+
+    save();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e)

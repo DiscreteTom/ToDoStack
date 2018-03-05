@@ -13,6 +13,8 @@
 #include <QAction>
 #include <QMenu>
 #include <QSystemTrayIcon>
+#include "funcbtn.h"
+#include <QList>
 
 namespace Ui {
 class MainWindow;
@@ -36,6 +38,8 @@ private:
     QLineEdit * newEventLe;
     QPushButton * pushBtn;
     QPushButton * popBtn;
+    QList<funcBtn *> upBtnList;
+    QList<funcBtn *> deleteBtnList;
 
     QTableWidget * eventTable;
 
@@ -59,6 +63,8 @@ private slots:
     void trayClicked(QSystemTrayIcon::ActivationReason reason);
     void getShow();
     void getClose();
+    void upEvent(int index);
+    void deleteEvent(int index);
 
 protected:
     void keyPressEvent(QKeyEvent * e);
