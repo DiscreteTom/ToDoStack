@@ -121,10 +121,17 @@ void MainWindow::eventPush(const QString &name)
 
 void MainWindow::eventPop()
 {
-    eventTable->removeRow(0);
+    if (eventTable->rowCount()){
+        //move event
+        for (int i = 0; i < eventTable->rowCount() - 1; ++i){
+            eventTable->item(i, 0)->setText(eventTable->item(i + 1, 0)->text());
+        }
 
-    upBtnList.removeLast();
-    deleteBtnList.removeLast();
+        eventTable->removeRow(eventTable->rowCount() - 1);
+
+        upBtnList.removeLast();
+        deleteBtnList.removeLast();
+    }
 }
 
 void MainWindow::getPush()
