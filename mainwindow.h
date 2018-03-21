@@ -31,31 +31,39 @@ public:
 private:
     Ui::MainWindow *ui;
 
-    //data
-    //QStack<QString> stack;
-
-    //ui
+    //================= private variable ================
+    //----------------- window object --------------
     QLineEdit * newEventLe;
     QPushButton * pushBtn;
     QPushButton * popBtn;
     QList<funcBtn *> upBtnList;
     QList<funcBtn *> deleteBtnList;
-
     QTableWidget * eventTable;
 
-    //save & load
-    void save();
-    void load();
-
-    //table function
-    void eventPush(const QString & name);
-    void eventPop();
-
-    //menu in tray
+    //----------------- menu in tray ---------------
     QSystemTrayIcon * icon;
     QAction * actionShow;
     QAction * actionClose;
+    QAction * actionChangeMinimize;
+    QAction * actionChangeWindowOnTop;
     QMenu * menu;
+
+    //------------------- config --------------------
+    bool windowOnTop;
+    bool minimizeToTray;
+    int windowHeight;
+    int windowWidth;
+
+    //================= private methods ========================
+    //-------------------- about file ------------------
+    void save();
+    void load();
+    void getConfig();
+    void setConfig();
+
+    //------------------- about table ----------------------
+    void eventPush(const QString & name);
+    void eventPop();
 
 private slots:
     void getPush();
@@ -65,6 +73,12 @@ private slots:
     void getClose();
     void upEvent(int index);
     void deleteEvent(int index);
+
+    void changeMinimize();
+    void changeWindowOnTop();
+
+    //to save when table date changed
+    void getItemChanged(QTableWidgetItem * item);
 
 protected:
     void keyPressEvent(QKeyEvent * e);

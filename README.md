@@ -2,6 +2,16 @@
 
 A stack about to-do list which makes your work more systematic
 
+## v2.0
+
+new feature
+
+- auto save when events in table are changed
+- prevent multi-open application
+- can set whether minimize to tray
+- can set window on top or not
+- remember window size
+
 ## v1.5
 
 new feature
@@ -51,6 +61,16 @@ support basical push and pop
 # 待办事件栈
 
 一个可以使您的工作更系统的工具
+
+## 版本2.0
+
+新特性
+
+- 编辑表格中事件时自动保存
+- 防止应用多次启动
+- 设置是否最小化到托盘
+- 设置是否窗口置顶
+- 记忆窗口尺寸
 
 ## 版本1.5
 

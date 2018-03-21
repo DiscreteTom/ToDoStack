@@ -37,17 +37,26 @@ MainWindow::MainWindow(QWidget *parent) :
     icon->show();
     actionShow = new QAction(tr("Show(&S)"), this);
     actionClose = new QAction(tr("Exit(&E)"), this);
+    actionChangeMinimize = new QAction(this);//will set text in getConfig()
+    actionChangeWindowOnTop = new QAction(this);//will set text in getConfig()
     menu = new QMenu(this);
     menu->addAction(actionShow);
+    menu->addAction(actionChangeMinimize);
+    menu->addAction(actionChangeWindowOnTop);
     menu->addAction(actionClose);
     connect(actionShow, &QAction::triggered, this, &MainWindow::getShow);
     connect(actionClose, &QAction::triggered, this, &MainWindow::getClose);
+    connect(actionChangeMinimize, &QAction::triggered, this, &MainWindow::changeMinimize);
+    connect(actionChangeWindowOnTop, &QAction::triggered, this, &MainWindow::changeWindowOnTop);
+
+    getConfig();
 
     //get data
     load();
 
     connect(pushBtn, &QPushButton::clicked, this, &MainWindow::getPush);
     connect(popBtn, &QPushButton::clicked, this, &MainWindow::getPop);
+    connect(eventTable, &QTableWidget::itemChanged, this, &MainWindow::getItemChanged);//to save when changed
 }
 
 MainWindow::~MainWindow()
@@ -93,6 +102,54 @@ void MainWindow::load(){
     for (int i = 0; i < n; ++i){
         eventPush(stack.pop());
     }
+}
+
+void MainWindow::getConfig()
+{
+    /*
+     * List:
+     * windowOnTop(0 or 1)
+     * minimizeToTray(0 or 1)
+     * windowHeight
+     * windowWidth
+     */
+    QFile file("config");
+    if (!file.open(QFile::ReadOnly | QFile::Text)){
+        QMessageBox::warning(this, tr("Error - ToDoStack"), tr("Read Config File Failed!!"));
+    }
+    QTextStream in(&file);
+    int n;
+    in >> n;
+    windowOnTop = n == 1;
+    in >> n;
+    minimizeToTray = n == 1;
+    in >> windowHeight >> windowWidth;
+
+    resize(windowWidth, windowHeight);
+
+    actionChangeMinimize->setText(minimizeToTray ? tr("Do not minimize to tray(&M)") : tr("Minimmize window to tray(&M)"));
+    actionChangeWindowOnTop->setText(windowOnTop ? tr("Do NOT Keep Window on Top(&T)") : tr("Keep Window on Top(&T)"));
+
+    if (windowOnTop)setWindowFlags(Qt::WindowStaysOnTopHint);//Window Stay On Top
+}
+
+void MainWindow::setConfig()
+{
+    /*
+     * List:
+     * windowOnTop(0 or 1)
+     * minimizeToTray(0 or 1)
+     * windowHeight
+     * windowWidth
+     */
+    QFile file("config");
+    if (!file.open(QFile::WriteOnly | QFile::Text)){
+        QMessageBox::warning(this, tr("Error - ToDoStack"), tr("Write Config File Failed!!"));
+    }
+    QTextStream out(&file);
+    out << (windowOnTop ? 1 : 0) << endl;
+    out << (minimizeToTray ? 1 : 0) << endl;
+    out << windowHeight << endl << windowWidth << endl;
 }
 
 void MainWindow::eventPush(const QString &name)
@@ -167,7 +224,10 @@ void MainWindow::getShow()
 
 void MainWindow::getClose()
 {
-    exit(0);
+    windowHeight = height();
+    windowWidth = width();
+    setConfig();
+    qApp->quit();//exit(0)
 }
 
 void MainWindow::upEvent(int index)
@@ -197,6 +257,46 @@ void MainWindow::deleteEvent(int index)
     save();
 }
 
+void MainWindow::changeMinimize()
+{
+    minimizeToTray = !minimizeToTray;
+    setConfig();
+    actionChangeMinimize->setText(minimizeToTray ? tr("Do NOT Minimize to Tray(&M)") : tr("Minimmize Window to Tray(&M)"));
+}
+
+void MainWindow::changeWindowOnTop()
+{
+    auto t = windowFlags();
+
+    windowOnTop = !windowOnTop;
+    setConfig();
+    actionChangeWindowOnTop->setText(windowOnTop ? tr("Do NOT Keep Window on Top(&T)") : tr("Keep Window on Top(&T)"));
+
+    if (windowOnTop){
+        if (!isHidden()){
+            hide();
+            setWindowFlags(Qt::WindowStaysOnTopHint);//Window Stay On Top
+            show();
+        } else {
+            setWindowFlags(Qt::WindowStaysOnTopHint);
+        }
+
+    } else {
+        if (!isHidden()){
+            hide();
+            setWindowFlags(!Qt::WindowStaysOnTopHint);//not stay on top
+            show();
+        } else {
+            setWindowFlags(!Qt::WindowStaysOnTopHint);
+        }
+    }
+}
+
+void MainWindow::getItemChanged(QTableWidgetItem *item)
+{
+    save();
+}
+
 void MainWindow::keyPressEvent(QKeyEvent *e)
 {
     switch (e->key()){
@@ -212,6 +312,13 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {
-    e->ignore();
-    hide();
+    if (minimizeToTray){
+        e->ignore();
+        hide();
+    } else {
+        windowHeight = height();
+        windowWidth = width();
+        setConfig();
+        e->accept();
+    }
 }
