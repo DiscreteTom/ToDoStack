@@ -2,6 +2,16 @@
 
 A stack about to-do list which makes your work more systematic
 
+## v2.1
+
+**Warning**
+
+This version move two files, which are called "config" and "event" and were in the program's directory, to C:/Program Files/ToDoStack. Please move them by your self.
+
+new feature
+
+- you can start this app when login your system
+
 ## v2.0
 
 new feature
@@ -61,6 +71,16 @@ support basical push and pop
 # 待办事件栈
 
 一个可以使您的工作更系统的工具
+
+## 版本2.1
+
+**注意**
+
+本次更新后原本在exe目录下的config文件和event文件被移动到了C盘Program Files里面的ToDoStack文件夹中 请用户自行移动
+
+新特性
+
+- 可以设置开机自启动
 
 ## 版本2.0
 

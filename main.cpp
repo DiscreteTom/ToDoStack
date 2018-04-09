@@ -4,15 +4,20 @@
 
 int main(int argc, char *argv[])
 {
-    //prevent multi-open
-    HANDLE hMutex = CreateMutex(NULL, false, (LPCTSTR)"ToDoStack");
-    if (GetLastError() == ERROR_ALREADY_EXISTS){
-        return 0;
-    }
+	//prevent multi-open
+	HANDLE hMutex = CreateMutex(NULL, false, (LPCTSTR)"ToDoStack");
+	if (GetLastError() == ERROR_ALREADY_EXISTS){
+		return 0;
+	}
 
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+	QApplication a(argc, argv);
+	MainWindow w;
 
-    return a.exec();
+	if (argc > 1 && (argv[1] == MainWindow::tr("autoStart"))){
+		w.hide();
+	} else {
+		w.show();
+	}
+
+	return a.exec();
 }

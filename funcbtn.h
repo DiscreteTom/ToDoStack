@@ -6,19 +6,19 @@
 
 class funcBtn : public QPushButton
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    enum FuncBtnType{DELETE, UP};
+	enum FuncBtnType{DELETE, UP};
 
-    funcBtn(QWidget * parent = NULL, FuncBtnType type = funcBtn::FuncBtnType::DELETE, int index = 0);
+	funcBtn(QWidget * parent = NULL, FuncBtnType type = funcBtn::FuncBtnType::DELETE, int index = 0);
 
-    FuncBtnType m_type;
-    int m_index;//from 0, from top
+	FuncBtnType m_type;
+	int m_index;//from 0, from top
 public slots:
-    void getClick();
+	void getClick();
 
 signals:
-    void sendIndex(int index);
+	void sendIndex(int index);
 };
 
 #endif // FUNCBTN_H
