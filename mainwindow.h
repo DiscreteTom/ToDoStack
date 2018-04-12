@@ -71,6 +71,8 @@ private:
 	//------------------- about table ----------------------
 	void eventPush(const QString & name);
 	void eventPop();
+	QString eventTop();
+
 
 private slots:
 	void getPush();
@@ -88,6 +90,9 @@ private slots:
 
 	//to save when table date changed
 	void getItemChanged(QTableWidgetItem * item);
+
+	//about systemTrayIcon
+	void setToolTip();
 
 protected:
 	void keyPressEvent(QKeyEvent * e);

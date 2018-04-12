@@ -67,6 +67,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(pushBtn, &QPushButton::clicked, this, &MainWindow::getPush);
 	connect(popBtn, &QPushButton::clicked, this, &MainWindow::getPop);
 	connect(eventTable, &QTableWidget::itemChanged, this, &MainWindow::getItemChanged);//to save when changed
+	connect(eventTable, &QTableWidget::itemChanged, this, &MainWindow::setToolTip);
+
+	setToolTip();
 }
 
 MainWindow::~MainWindow()
@@ -236,6 +239,20 @@ void MainWindow::eventPop()
 		upBtnList.removeLast();
 		deleteBtnList.removeLast();
 	}
+}
+
+QString MainWindow::eventTop()
+{
+	if (eventTable->rowCount()){
+		return eventTable->item(0, 0)->text();
+	} else {
+		return tr("无事件");
+	}
+}
+
+void MainWindow::setToolTip()
+{
+	icon->setToolTip(tr("ToDoStack - ") + eventTop());
 }
 
 void MainWindow::getPush()

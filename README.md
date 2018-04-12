@@ -2,6 +2,10 @@
 
 A stack about to-do list which makes your work more systematic
 
+## v2.2
+
+SystemTrayIcon new can show the state of ToDoStack
+
 ## v2.1
 
 **Warning**
@@ -71,6 +75,10 @@ support basical push and pop
 # 待办事件栈
 
 一个可以使您的工作更系统的工具
+
+## 版本2.2
+
+托盘图标增加显示信息
 
 ## 版本2.1
 
